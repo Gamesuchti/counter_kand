@@ -18,7 +18,8 @@ spec:
         - name: counter-frontend
           image: ghcr.io/gamesuchti/counter-frontend:v1
           ports:
-            - containerPort: 3100
+            - containerPort: 3000
+              protocol: TCP
           env:
             - name: BACKEND_URL
               valueFrom:
@@ -27,19 +28,23 @@ spec:
                   key: BACKEND_URL
             - name: npm_config_cache
               value: ./.npm-cache
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app: counter-frontend
   name: counter-frontend
 spec:
+  ports:
+    - name: 3000-tcp
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
   selector:
     app: counter-frontend
-  ports:
-    - protocol: TCP
-      port: 3100
-      targetPort: 3100
+  sessionAffinity: None
+  type: ClusterIP
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -50,6 +55,6 @@ spec:
     kind: Service
     name: counter-frontend
   port:
-    targetPort: 3100
+    targetPort: 3000
   tls:
     termination: edge

@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: counter-frontend
 data:
-  BACKEND_URL: "counter-backend.243738-timbossard.svc.cluster.local"
+  BACKEND_URL: "https://counter-backend-243738-timbossard.apps.exoscale-ch-gva-2-0.appuio.cloud/"
