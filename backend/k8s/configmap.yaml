@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: counter-database
 data:
-  DB_HOST: "localhost"
+  DB_HOST: "counter-database.243738-timbossard.svc.cluster.local"
