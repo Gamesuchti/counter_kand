@@ -17,6 +17,8 @@ spec:
       containers:
         - name: counter-frontend
           image: ghcr.io/gamesuchti/counter-frontend:v1
+          ports:
+            - containerPort: 3100
           env:
             - name: BACKEND_URL
               valueFrom:
