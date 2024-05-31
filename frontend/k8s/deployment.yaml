@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-frontend
+  labels:
+    app: counter-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-frontend
+  template:
+    metadata:
+      labels:
+        app: counter-frontend
+    spec:
+      containers:
+        - name: counter-frontend
+          image: ghcr.io/gamesuchti/counter-frontend:v1
+          env:
+            - name: BACKEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: counter-frontend
+                  key: BACKEND_URL
+            - name: npm_config_cache
+              value: ./.npm-cache
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-frontend
+spec:
+  selector:
+    app: counter-frontend
+  ports:
+    - protocol: TCP
+      port: 3100
+      targetPort: 3100
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: counter-frontend
+spec:
+  to:
+    kind: Service
+    name: counter-frontend
+  port:
+    targetPort: 3100
+  tls:
+    termination: edge
