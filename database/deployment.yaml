@@ -34,3 +34,20 @@ spec:
                 secretKeyRef:
                   name: counter-database
                   key: database-name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: counter-database
+  name: counter-database
+spec:
+  ports:
+    - name: 5432-tcp
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    app: counter-database
+  sessionAffinity: None
+  type: ClusterIP
